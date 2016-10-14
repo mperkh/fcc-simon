@@ -5910,41 +5910,4 @@ button.close {
     display: none !important;
   }
 }
-
-.GameField {
-  margin: 0 0 30px;;
-  width: 300px;
-  height: 300px;
-}
-
-#field01 {
-  background-color: green;
-}
-
-#field02 {
-  background-color: red;
-}
-
-#field03 {
-  background-color: yellow;
-}
-
-#field04 {
-  background-color: blue;
-}
-
-#field01.active {
-  background-color: white;
-}
-
-#field02.active {
-  background-color: white;
-}
-
-#field03.active {
-  background-color: white;
-}
-
-#field04.active {
-  background-color: white;
-}
+/*# sourceMappingURL=bootstrap.css.map */
