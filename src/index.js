@@ -98,9 +98,17 @@ class SimonGame extends Component {
   }
 
   handleClick(num){
+    let difficulty;
+    if (this.count > 8 && this.count <=  12) {
+      difficulty = 320
+    } else if (this.count > 12) {
+      difficulty = 220
+    } else {
+      difficulty = 420
+    }
     if (this.state.status === 'idle') {
       if (num === this.sequence[this.input]) {
-        this.playTone(num, false, 420);
+        this.playTone(num, false, difficulty);
         this.input++
         if (this.input > this.count) {
           this.setState({
@@ -109,18 +117,18 @@ class SimonGame extends Component {
             this.count++;
             this.input = 0;
             setTimeout(() => {
-              this.playTones(420);
+              this.playTones(difficulty);
             }, 1000)
           })
         }
       } else {
-        this.playTone(num, true, 420);
+        this.playTone(num, true, difficulty);
         this.setState({
             status: 'playing'
           }, () => {
             this.input = 0;
             setTimeout(() => {
-              this.playTones(470);
+              this.playTones(difficulty);
             }, 2000)
           })
       }
