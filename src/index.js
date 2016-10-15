@@ -102,7 +102,6 @@ class SimonGame extends Component {
   }
 
   handleStart () {
-    console.log(this.sequence);
     this.pos = 0;
     this.setState({
       status: 'playing'
@@ -123,6 +122,34 @@ class SimonGame extends Component {
       })
   }
 
+  gameWon(num) {
+    clearTimeout(this.timeoutID);
+
+    this.playTone(num, 20)
+
+    setTimeout(() => {
+      for (let i=0; i <= 4; i++) {
+        setTimeout(() => {
+          this.playTone(num, 70)
+        }, 90 * i)
+      }
+    }, 40)
+
+    setTimeout(() => {
+      this.sequence = Array(20).fill(0).map(() => {
+        return Math.round(Math.random() * 3) + 1
+      });
+      this.count = 0;
+      this.pos = 0;
+      this.input = 0;
+      this.difficulty = 420;
+      this.setState({
+        status: 'paused',
+        field: 0
+      })
+    }, 490)
+  }
+
   handleClick(num){
     this.startTimeout();
     if (this.count > 8 && this.count <=  12) {
@@ -134,16 +161,20 @@ class SimonGame extends Component {
       if (num === this.sequence[this.input]) {
         this.playTone(num, this.difficulty);
         this.input++
-        if (this.input > this.count) {
-          this.setState({
-            status: 'playing'
-          }, () => {
-            this.count++;
-            this.input = 0;
-            setTimeout(() => {
-              this.playTones(this.difficulty);
-            }, 800)
-          })
+        if (this.input >= 20) {
+          this.gameWon(num);
+        } else {
+          if (this.input > this.count) {
+            this.setState({
+              status: 'playing'
+            }, () => {
+              this.count++;
+              this.input = 0;
+              setTimeout(() => {
+                this.playTones(this.difficulty);
+              }, 800)
+            })
+          }
         }
       } else {
         this.doError(num)
@@ -163,6 +194,7 @@ class SimonGame extends Component {
         <Button
           onClick={this.handleStart}
           bsSize="large"
+          disabled={(this.state.status === 'paused') ? false : true}
           >
           Start
         </Button>
