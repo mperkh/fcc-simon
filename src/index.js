@@ -53,10 +53,6 @@ class SimonGame extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    //this.startTimeout();
-  }
-
   playNote(freq, duration) {
     // create Oscillator node
     let oscillator = this.audioCtx.createOscillator();
