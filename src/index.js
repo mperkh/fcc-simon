@@ -27,6 +27,8 @@ class SimonGame extends Component {
     this.count = 0;
     this.pos = 0;
     this.input = 0;
+    this.difficulty = 420;
+    this.timeoutID = undefined;
 
     this.Sounds = [515, 310, 252, 209, 42];
 
@@ -34,11 +36,25 @@ class SimonGame extends Component {
     this.audioCtx = new AudioContext();
 
     this.state = {
-      status: 'idle',
+      status: 'paused',
       field: 0
     }
 
     this.handleStart = this.handleStart.bind(this);
+  }
+
+  startTimeout() {
+    clearTimeout(this.timeoutID);
+    this.timeoutID = undefined;
+    if (!this.timeoutID) {
+      this.timeoutID = setTimeout(() => {
+        this.doError()
+      }, 3000)
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    //this.startTimeout();
   }
 
   playNote(freq, duration) {
@@ -52,7 +68,7 @@ class SimonGame extends Component {
     oscillator.stop(this.audioCtx.currentTime + duration);
   }
 
-  playTone(pos, err, speed) {
+  playTone(pos, speed) {
     this.setState({
       field: pos
     }, () => {
@@ -60,9 +76,9 @@ class SimonGame extends Component {
         this.setState({
           field: 0
         })
-      }, (err) ? 1500 : speed)
+      }, (pos === 5) ? 1500 : speed)
     })
-    if (err) {
+    if (pos === 5) {
       this.playNote(this.Sounds[4], 1.5)
     } else {
       this.playNote(this.Sounds[pos - 1], speed / 1000)
@@ -70,7 +86,8 @@ class SimonGame extends Component {
   }
 
   playTones(speed) {
-    this.playTone(this.sequence[this.pos], false, speed);
+    clearTimeout(this.timeoutID);
+    this.playTone(this.sequence[this.pos], speed);
     this.pos++
     if (this.pos <= this.count) {
       setTimeout(() => {
@@ -82,6 +99,7 @@ class SimonGame extends Component {
         this.setState({
           status: 'idle'
         })
+        this.startTimeout()
       }, speed + 50)
 
     }
@@ -93,22 +111,32 @@ class SimonGame extends Component {
     this.setState({
       status: 'playing'
     }, () => {
-      this.playTones(420);
+      this.playTones(this.difficulty);
     })
   }
 
+  doError(num) {
+    this.playTone(5, this.difficulty);
+    this.setState({
+        status: 'playing'
+      }, () => {
+        this.input = 0;
+        setTimeout(() => {
+          this.playTones(this.difficulty);
+        }, 2000)
+      })
+  }
+
   handleClick(num){
-    let difficulty;
+    this.startTimeout();
     if (this.count > 8 && this.count <=  12) {
-      difficulty = 320
+      this.difficulty = 320
     } else if (this.count > 12) {
-      difficulty = 220
-    } else {
-      difficulty = 420
+      this.difficulty = 220
     }
     if (this.state.status === 'idle') {
       if (num === this.sequence[this.input]) {
-        this.playTone(num, false, difficulty);
+        this.playTone(num, this.difficulty);
         this.input++
         if (this.input > this.count) {
           this.setState({
@@ -117,20 +145,12 @@ class SimonGame extends Component {
             this.count++;
             this.input = 0;
             setTimeout(() => {
-              this.playTones(difficulty);
-            }, 1000)
+              this.playTones(this.difficulty);
+            }, 800)
           })
         }
       } else {
-        this.playTone(num, true, difficulty);
-        this.setState({
-            status: 'playing'
-          }, () => {
-            this.input = 0;
-            setTimeout(() => {
-              this.playTones(difficulty);
-            }, 2000)
-          })
+        this.doError(num)
       }
     }
   }
