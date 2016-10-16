@@ -255,7 +255,7 @@ class SimonGame extends Component {
             type="button"
             onClick={this.handleOnOff}
             >
-            Turn On/Off
+            Turn On-Off
           </button>
           <button
             className="btn btn-large"
