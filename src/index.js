@@ -31,11 +31,12 @@ class SimonGame extends Component {
 
     this.state = {
       status: 'paused',
-      field: 0
+      field: 0,
+      strict: false
     }
 
     this.handleStart = this.handleStart.bind(this);
-    this.handleStop = this.handleStop.bind(this);
+    this.handleStrict = this.handleStrict.bind(this);
   }
 
   startTimeout() {
@@ -98,7 +99,24 @@ class SimonGame extends Component {
 
   doError(num) {
     this.playTone(5, this.difficulty);
-    this.setState({
+    if (this.state.strict) {
+      setTimeout(() => {
+        this.sequence = Array(20).fill(0).map(() => {
+          return Math.round(Math.random() * 3) + 1
+        });
+        this.count = 0;
+        this.pos = 0;
+        this.input = 0;
+        this.difficulty = 420;
+        this.setState({
+          status: 'paused',
+          field: 0
+        }, () => {
+          this.playTones(this.difficulty);
+        })
+      }, 2000)
+    } else {
+      this.setState({
         status: 'playing'
       }, () => {
         this.input = 0;
@@ -106,6 +124,7 @@ class SimonGame extends Component {
           this.playTones(this.difficulty);
         }, 2000)
       })
+    }
   }
 
   gameWon(num) {
@@ -168,7 +187,7 @@ class SimonGame extends Component {
     }
   }
 
-  handleStart () {
+  handleStart() {
     this.pos = 0;
     this.setState({
       status: 'playing'
@@ -177,8 +196,10 @@ class SimonGame extends Component {
     })
   }
 
-  handleStop () {
-
+  handleStrict() {
+    this.setState({
+      strict: !this.state.strict
+    });
   }
 
   render() {
@@ -186,7 +207,7 @@ class SimonGame extends Component {
       <div>
         <p className="lead">
           Game turned <strong>OFF</strong>.<br />
-          Strict Mode is <strong>OFF</strong>.<br />
+          Strict Mode is <strong>{(this.state.strict) ? 'ON' : 'OFF'}</strong>.<br />
           Level: <strong>{this.count + 1}</strong>
         </p>
         <button
@@ -207,7 +228,7 @@ class SimonGame extends Component {
         <button
           className="btn"
           type="button"
-          onClick={this.handleStart}
+          onClick={this.handleStrict}
           >
           Toggle Strict Mode
         </button>
