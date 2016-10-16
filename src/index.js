@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import './bootstrap.min.css'
 import './index.css';
-import './bootstrap-theme.min.css'
 
 /*
 *
@@ -30,13 +30,14 @@ class SimonGame extends Component {
     this.audioCtx = new AudioContext();
 
     this.state = {
-      status: 'paused',
+      status: 'off',
       field: 0,
       strict: false
     }
 
     this.handleStart = this.handleStart.bind(this);
     this.handleStrict = this.handleStrict.bind(this);
+    this.handleOnOff = this.handleOnOff.bind(this);
   }
 
   startTimeout() {
@@ -156,13 +157,13 @@ class SimonGame extends Component {
   }
 
   handleClick(num){
-    this.startTimeout();
-    if (this.count > 8 && this.count <=  12) {
-      this.difficulty = 320
-    } else if (this.count > 12) {
-      this.difficulty = 220
-    }
-    if (this.state.status === 'idle') {
+    if (this.state.status === 'idle' && this.state.status !== 'off' ) {
+      this.startTimeout();
+      if (this.count > 8 && this.count <=  12) {
+        this.difficulty = 320
+      } else if (this.count > 12) {
+        this.difficulty = 220
+      }
       if (num === this.sequence[this.input]) {
         this.playTone(num, this.difficulty);
         this.input++
@@ -182,7 +183,11 @@ class SimonGame extends Component {
           }
         }
       } else {
-        this.doError(num)
+        this.setState({
+          status: 'paused'
+        }, () => {
+          this.doError(num);
+        })
       }
     }
   }
@@ -202,37 +207,74 @@ class SimonGame extends Component {
     });
   }
 
+  handleOnOff() {
+    if (this.state.status === 'off') {
+      this.setState({
+        status: 'paused'
+      });
+    } else {
+      this.setState({
+        status: 'off',
+        field: 0
+      }, () => {
+        this.sequence = Array(20).fill(0).map(() => {
+          return Math.round(Math.random() * 3) + 1
+        });
+        this.count = 0;
+        this.pos = 0;
+        this.input = 0;
+        this.difficulty = 420;
+        // http://stackoverflow.com/a/8860203
+        let id = setTimeout(function() {}, 0);
+        while (id--) {
+            window.clearTimeout(id);
+        }
+      });
+    }
+  }
+
   render() {
+    let StrictMode;
+    if (this.state.status === 'off') {
+      StrictMode = '--';
+    } else if (this.state.strict) {
+      StrictMode = 'ON.';
+    } else {
+      StrictMode = 'OFF.'
+    }
     return (
       <div>
         <p className="lead">
-          Game turned <strong>OFF</strong>.<br />
-          Strict Mode is <strong>{(this.state.strict) ? 'ON' : 'OFF'}</strong>.<br />
-          Level: <strong>{this.count + 1}</strong>
+          Game turned <strong>{(this.state.status === 'off') ? 'OFF' : 'ON'}</strong>.<br />
+          Strict Mode is <strong>{StrictMode}</strong><br />
+          Level: <strong>{(this.state.status === 'off') ? '--' : this.count + 1}</strong>
+          {this.state.status}
         </p>
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={this.handleOn}
-          >
-          Turn On/Off
-        </button>
-        <button
-          className="btn"
-          type="button"
-          onClick={this.handleStart}
-          disabled={(this.state.status === 'paused') ? false : true}
-          >
-          Start
-        </button>
-        <button
-          className="btn"
-          type="button"
-          onClick={this.handleStrict}
-          >
-          Toggle Strict Mode
-        </button>
-        <br />
+        <p id="gamecontrols">
+          <button
+            className="btn btn-large"
+            type="button"
+            onClick={this.handleOnOff}
+            >
+            Turn On/Off
+          </button>
+          <button
+            className="btn btn-large"
+            type="button"
+            onClick={this.handleStart}
+            disabled={(this.state.status === 'off' || this.state.status !== 'paused') ? true : false}
+            >
+            Start
+          </button>
+          <button
+            className="btn btn-large"
+            type="button"
+            onClick={this.handleStrict}
+            disabled={(this.state.status === 'off') ? true : false}
+            >
+            Toggle Strict Mode
+          </button>
+        </p>
         <div className="row-fluid">
           <div className="span6">
             <div
