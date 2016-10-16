@@ -253,10 +253,45 @@ class SimonGame extends Component {
           Strict Mode is <strong>{StrictMode}</strong><br />
           Level: <strong>{(this.state.status === 'off') ? '--' : this.count + 1}</strong>
         </p>
+        <Row>
+          <Col xs={6} className="parent">
+            <div
+              id="field01"
+              className={'img-responsive GameField' + (this.state.field === 1 ? ' active' : '')}
+              onClick={this.handleClick.bind(this, 1)}
+            >
+            </div>
+          </Col>
+          <Col xs={6} className="parent">
+            <div
+              id="field02"
+              className={'img-responsive GameField' + (this.state.field === 2 ? ' active' : '')}
+              onClick={this.handleClick.bind(this, 2)}
+            >
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={6} className="parent">
+            <div
+              id="field03"
+              className={'img-responsive GameField' + (this.state.field === 3 ? ' active' : '')}
+              onClick={this.handleClick.bind(this, 3)}
+            >
+            </div>
+          </Col>
+          <Col xs={6} className="parent">
+            <div
+              id="field04"
+              className={'img-responsive GameField' + (this.state.field === 4 ? ' active' : '')}
+              onClick={this.handleClick.bind(this, 4)}
+            >
+            </div>
+          </Col>
+        </Row>
         <p id="gamecontrols">
           <Button
             bsSize="large"
-            bsStyle="primary"
             onClick={this.handleOnOff}
             >
             Turn On-Off
@@ -270,49 +305,12 @@ class SimonGame extends Component {
           </Button>
           <Button
             bsSize="large"
-            bsStyle="danger"
             onClick={this.handleStrict}
             disabled={(this.state.status === 'off') ? true : false}
             >
             Toggle Strict Mode
           </Button>
         </p>
-        <Row>
-          <Col xs={6}>
-            <div
-              id="field01"
-              className={'GameField' + (this.state.field === 1 ? ' active' : '')}
-              onClick={this.handleClick.bind(this, 1)}
-            >
-            </div>
-          </Col>
-          <Col xs={6}>
-            <div
-              id="field02"
-              className={'GameField' + (this.state.field === 2 ? ' active' : '')}
-              onClick={this.handleClick.bind(this, 2)}
-            >
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={6}>
-            <div
-              id="field03"
-              className={'GameField' + (this.state.field === 3 ? ' active' : '')}
-              onClick={this.handleClick.bind(this, 3)}
-            >
-            </div>
-          </Col>
-          <Col xs={6}>
-            <div
-              id="field04"
-              className={'GameField' + (this.state.field === 4 ? ' active' : '')}
-              onClick={this.handleClick.bind(this, 4)}
-            >
-            </div>
-          </Col>
-        </Row>
       </div>
     );
   }
