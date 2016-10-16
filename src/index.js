@@ -248,7 +248,6 @@ class SimonGame extends Component {
           Game turned <strong>{(this.state.status === 'off') ? 'OFF' : 'ON'}</strong>.<br />
           Strict Mode is <strong>{StrictMode}</strong><br />
           Level: <strong>{(this.state.status === 'off') ? '--' : this.count + 1}</strong>
-          {this.state.status}
         </p>
         <p id="gamecontrols">
           <button
