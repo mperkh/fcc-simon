@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import './bootstrap.min.css'
+import { PageHeader } from 'react-bootstrap';
+import { Grid } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import './index.css';
 
 /*
@@ -250,66 +254,65 @@ class SimonGame extends Component {
           Level: <strong>{(this.state.status === 'off') ? '--' : this.count + 1}</strong>
         </p>
         <p id="gamecontrols">
-          <button
-            className="btn btn-large"
-            type="button"
+          <Button
+            bsSize="large"
+            bsStyle="primary"
             onClick={this.handleOnOff}
             >
             Turn On-Off
-          </button>
-          <button
-            className="btn btn-large"
-            type="button"
+          </Button>
+          <Button
+            bsSize="large"
             onClick={this.handleStart}
             disabled={(this.state.status === 'off' || this.state.status !== 'paused') ? true : false}
             >
             Start
-          </button>
-          <button
-            className="btn btn-large"
-            type="button"
+          </Button>
+          <Button
+            bsSize="large"
+            bsStyle="danger"
             onClick={this.handleStrict}
             disabled={(this.state.status === 'off') ? true : false}
             >
             Toggle Strict Mode
-          </button>
+          </Button>
         </p>
-        <div className="row-fluid">
-          <div className="span6">
+        <Row>
+          <Col xs={6}>
             <div
               id="field01"
               className={'GameField' + (this.state.field === 1 ? ' active' : '')}
               onClick={this.handleClick.bind(this, 1)}
             >
             </div>
-          </div>
-          <div className="span6">
+          </Col>
+          <Col xs={6}>
             <div
               id="field02"
               className={'GameField' + (this.state.field === 2 ? ' active' : '')}
               onClick={this.handleClick.bind(this, 2)}
             >
             </div>
-          </div>
-        </div>
-        <div className="row-fluid">
-          <div className="span6">
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={6}>
             <div
               id="field03"
               className={'GameField' + (this.state.field === 3 ? ' active' : '')}
               onClick={this.handleClick.bind(this, 3)}
             >
             </div>
-          </div>
-          <div className="span6">
+          </Col>
+          <Col xs={6}>
             <div
               id="field04"
               className={'GameField' + (this.state.field === 4 ? ' active' : '')}
               onClick={this.handleClick.bind(this, 4)}
             >
             </div>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </div>
     );
   }
@@ -318,10 +321,10 @@ class SimonGame extends Component {
 class App extends Component {
   render() {
     return (
-      <div className="container">
-        <div className="row-fluid">
-          <div className="span8 offset2">
-            <div className="page-header">freeCodeCamp: Build a Simon Game
+      <Grid>
+        <Row>
+          <Col md={8} mdOffset={2}>
+            <PageHeader>freeCodeCamp: Build a Simon Game
               <br/>
                 <small>
                   Project by camper
@@ -331,11 +334,11 @@ class App extends Component {
                     &nbsp;Michael Perkhofer
                   </a>
                 </small>
-            </div>
+            </PageHeader>
             <SimonGame />
-          </div>
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }
