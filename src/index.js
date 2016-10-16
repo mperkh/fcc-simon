@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { PageHeader } from 'react-bootstrap';
-import { Grid } from 'react-bootstrap';
-import { Row } from 'react-bootstrap';
-import { Col } from 'react-bootstrap';
-//import { Modal } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
 import './index.css';
 import './bootstrap-theme.min.css'
 
@@ -41,6 +35,7 @@ class SimonGame extends Component {
     }
 
     this.handleStart = this.handleStart.bind(this);
+    this.handleStop = this.handleStop.bind(this);
   }
 
   startTimeout() {
@@ -99,15 +94,6 @@ class SimonGame extends Component {
       }, speed + 50)
 
     }
-  }
-
-  handleStart () {
-    this.pos = 0;
-    this.setState({
-      status: 'playing'
-    }, () => {
-      this.playTones(this.difficulty);
-    })
   }
 
   doError(num) {
@@ -182,58 +168,86 @@ class SimonGame extends Component {
     }
   }
 
-  componentDidMount() {
+  handleStart () {
+    this.pos = 0;
+    this.setState({
+      status: 'playing'
+    }, () => {
+      this.playTones(this.difficulty);
+    })
+  }
+
+  handleStop () {
 
   }
 
   render() {
     return (
       <div>
-        {this.state.status}<br />
-        {this.count + 1}<br />
-        <Button
+        <p className="lead">
+          Game turned <strong>OFF</strong>.<br />
+          Strict Mode is <strong>OFF</strong>.<br />
+          Level: <strong>{this.count + 1}</strong>
+        </p>
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={this.handleOn}
+          >
+          Turn On/Off
+        </button>
+        <button
+          className="btn"
+          type="button"
           onClick={this.handleStart}
-          bsSize="large"
           disabled={(this.state.status === 'paused') ? false : true}
           >
           Start
-        </Button>
-        <Row>
-          <Col xs={6}>
+        </button>
+        <button
+          className="btn"
+          type="button"
+          onClick={this.handleStart}
+          >
+          Toggle Strict Mode
+        </button>
+        <br />
+        <div className="row-fluid">
+          <div className="span6">
             <div
               id="field01"
               className={'GameField' + (this.state.field === 1 ? ' active' : '')}
               onClick={this.handleClick.bind(this, 1)}
             >
             </div>
-          </Col>
-          <Col xs={6}>
+          </div>
+          <div className="span6">
             <div
               id="field02"
               className={'GameField' + (this.state.field === 2 ? ' active' : '')}
               onClick={this.handleClick.bind(this, 2)}
             >
             </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={6} >
+          </div>
+        </div>
+        <div className="row-fluid">
+          <div className="span6">
             <div
               id="field03"
               className={'GameField' + (this.state.field === 3 ? ' active' : '')}
               onClick={this.handleClick.bind(this, 3)}
             >
             </div>
-          </Col>
-          <Col xs={6}>
+          </div>
+          <div className="span6">
             <div
               id="field04"
               className={'GameField' + (this.state.field === 4 ? ' active' : '')}
               onClick={this.handleClick.bind(this, 4)}
             >
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </div>
     );
   }
@@ -242,10 +256,10 @@ class SimonGame extends Component {
 class App extends Component {
   render() {
     return (
-      <Grid>
-        <Row>
-          <Col md={8} mdOffset={2}>
-            <PageHeader>freeCodeCamp: Build a Simon Game
+      <div className="container">
+        <div className="row-fluid">
+          <div className="span8 offset2">
+            <div className="page-header">freeCodeCamp: Build a Simon Game
               <br/>
                 <small>
                   Project by camper
@@ -255,11 +269,11 @@ class App extends Component {
                     &nbsp;Michael Perkhofer
                   </a>
                 </small>
-            </PageHeader>
+            </div>
             <SimonGame />
-          </Col>
-        </Row>
-      </Grid>
+          </div>
+        </div>
+      </div>
     );
   }
 }
