@@ -254,7 +254,7 @@ class SimonGame extends Component {
           Level: <strong>{(this.state.status === 'off') ? '--' : this.count + 1}</strong>
         </p>
         <Row>
-          <Col xs={6} className="parent">
+          <Col xs={4} xsOffset={2} className="parent">
             <div
               id="field01"
               className={'img-responsive GameField' + (this.state.field === 1 ? ' active' : '')}
@@ -262,7 +262,7 @@ class SimonGame extends Component {
             >
             </div>
           </Col>
-          <Col xs={6} className="parent">
+          <Col xs={4} className="parent">
             <div
               id="field02"
               className={'img-responsive GameField' + (this.state.field === 2 ? ' active' : '')}
@@ -272,7 +272,7 @@ class SimonGame extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={6} className="parent">
+          <Col xs={4} xsOffset={2} className="parent">
             <div
               id="field03"
               className={'img-responsive GameField' + (this.state.field === 3 ? ' active' : '')}
@@ -280,7 +280,7 @@ class SimonGame extends Component {
             >
             </div>
           </Col>
-          <Col xs={6} className="parent">
+          <Col xs={4} className="parent">
             <div
               id="field04"
               className={'img-responsive GameField' + (this.state.field === 4 ? ' active' : '')}
